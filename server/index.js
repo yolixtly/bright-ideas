@@ -1,7 +1,43 @@
 import 'babel-polyfill';
 import express from 'express';
 var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
 
+var mongoose = require('mongoose');
+var config = require('./config');
+
+
+let app = express();
+
+/* Middleware */
+app.use(jsonParser);
+
+
+/*Connection to MongoDB/mongoose */
+var runServer = function(callback) {
+    mongoose.connect(config.DATABASE_URL, function(err) {
+        if (err && callback) {
+            return callback(err);
+        }
+        
+        app.listen(config.PORT, function() {
+            console.log('Listening on localhost:' + config.PORT);
+            if (callback) {
+                callback();
+            }
+        });
+    });
+};
+if (require.main === module) {
+    runServer(function(err) {
+        if (err) {
+            console.error(err);
+        }
+    });
+};
+
+/*Connecting to index in build */
+app.use('/', express.static('build'));
 
 var DummyData = [
     {
@@ -45,14 +81,11 @@ var DummyData = [
     }
 ];
 
-const HOST = process.env.HOST;
-const PORT = process.env.PORT || 8080;
+// const HOST = process.env.HOST;
+// const PORT = process.env.PORT || 8080;
 
-console.log(`Server running in ${process.env.NODE_ENV} mode`);
+// console.log(`Server running in ${process.env.NODE_ENV} mode`);
 
-let app = express();
-
- app.use(bodyParser.json());
 /*
  GET ENDPOINT TO:
     get all the board Dummy Data 
@@ -86,22 +119,9 @@ app.put('/:boardId/:itemId', function(request, response){
     response.json(DummyData);
 });
 
-app.use(express.static(process.env.CLIENT_PATH));
 
-function runServer() {
-    return new Promise((resolve, reject) => {
-        app.listen(PORT, HOST, (err) => {
-            if (err) {
-                console.error(err);
-                reject(err);
-            }
 
-            const host = HOST || 'localhost';
-            console.log(`Listening on ${host}:${PORT}`);
-        });
-    });
-}
 
-if (require.main === module) {
-    runServer();
-}
+
+exports.app = app;
+exports.runServer= runServer;
