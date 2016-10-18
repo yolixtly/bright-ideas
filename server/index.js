@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var config = require('./config');
 var Board = require('./models/board');
 var Idea = require('./models/idea');
-
+var relationship = require("mongoose-relationship");
 
 let app = express();
 
@@ -32,29 +32,83 @@ function Idea(title, voteCount){
 //     console.log(board);
 // });
 
+/*Creates a new Idea Works!! */
+// var item = new Idea({
+//     ideaTitle: 'Awesome!',
+//     voteCount: 15
+// });
+
+// item.save(function(err, item){
+//         if(err) {
+//             console.log(err);
+//         }
+//         console.log('new idea', item);
+// });
+
 /*Finds a Board and Creates a new Idea: it Works! */
 Board.findOne({title: 'TestBoard'}, function(err, board){
     if(err){
         console.log(err);
     }
-    console.log('Board Found: ', board._id);
+    console.log('Board before Ideas: ', board);
 
-    Idea.create({
-        _creator: board._id,
-        ideaTitle: 'testIdea',
-        voteCount: 5
-    }, function(err, idea){
-        if(err){
-            console.log('idea error ', err);
-        }
-        console.log(idea);
+    /*Creates a new Idea  Works!*/
+    var item = new Idea({
+        ideaTitle: 'Cool!',
+        voteCount: 15
     });
+
+    item.save(function(err, item){
+            if(err) {
+                console.log(err);
+            }
+            console.log('new idea', item);
+    });
+
+    /*this works by saving the reference of the Idea Works!*/
+
+    board.ideas.push(item);
+    board.save(function(err, boardUpdate){
+        if(err){
+            console.log('update error ', err);
+        }
+        console.log('board after ideas added: ', boardUpdate);
+    });
+    
+    /*The next approach doesnt work*/
+
+   // var testIdea = Idea.create({
+   //      _creator: board._id,
+   //      ideaTitle: 'AwesomeIdea',
+   //      voteCount: 5
+   //  }, function(err, idea){
+   //      if(err){
+   //          console.log('idea error ', err);
+   //      }
+   //      console.log(idea);
+   //  });
+
+   // board.ideas.push(testIdea);
+   // board.save(function(err, boardUpdate){
+   //      if(err){
+   //          console.log('update error ', err);
+   //      }
+   //      console.log('board after ideas added: ', boardUpdate);
+   //  })
 });
+
+
 
 /*Lets us see the data of both Board and Idea in the Console but Idea is outside Board.ideas*/
-Board.findOne({title: 'TestBoard'}).populate('ideas').exec(function(err, boards){
-console.log(JSON.stringify(boards, null, 2));
-});
+
+// Board.findOne({title: 'TestBoard'}).populate('ideas').exec(function(err, board){
+//     console.log('board with ideas : ', board);
+// console.log(JSON.stringify(boards, null, 2));
+// });
+
+// Idea.find().exec(function(err, idea){
+//     console.log('find ideas: ', idea);
+// });
 
 
 

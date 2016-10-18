@@ -1,8 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Idea = require('./idea');
-
-
+// var Idea = require('./idea');
+var relationship = require("mongoose-relationship");
 
 var BoardSchema = new mongoose.Schema({
 	title: {type: String, require: true},
@@ -10,5 +9,8 @@ var BoardSchema = new mongoose.Schema({
 });
 
 var Board = mongoose.model('Board', BoardSchema);
+
+// Board.plugin(relationship, { relationshipPathName: 'ideas' });
+
 
 module.exports = Board;
