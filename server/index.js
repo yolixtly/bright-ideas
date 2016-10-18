@@ -19,11 +19,11 @@ app.use(jsonParser);
 
 /*ENDPOINTS BEGIN HERE */
 
-/* #1: GET ALL THE BOARDS and ITS CONTENT */
+/* #1: GET ALL THE BOARDS and ITS CONTENT - DONE */
 app.get('/boards', function(req, res) {
 
-    Board.find(function(err, boards){
-        if(err){
+    Board.find(function(err, boards) {
+        if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
@@ -32,59 +32,123 @@ app.get('/boards', function(req, res) {
     });
 });
 
-/* #2: GET ONLY ALL THE BOARDS TITLES */
+/* #2: GET ONLY ALL THE BOARDS TITLES - DONE */
 
 app.get('/boardTitles', function(req, res) {
 
-    Board.find(function(err, boards){
-        if(err){
+    Board.find(function(err, boards) {
+        if (err) {
             return res.status(500).json({
                 message: 'Internal Server Error'
             });
         }
-    var boardTitles = []; 
-    for(var i = 0; i < boards.length; i++){
-        boardTitles.push(boards[i].title);
-    }
-    res.json(boardTitles);
+        var boardTitles = [];
+        for (var i = 0; i < boards.length; i++) {
+            boardTitles.push(boards[i].title);
+        }
+        res.json(boardTitles);
     });
 });
 
 
-/* #3: CREATE A NEW BOARD */
+/* #3: CREATE A NEW BOARD - DONE */
 
-app.post('/newBoard', function(req, res){
-     Board.create({
-            title: req.body.title
-        }, function(err, board){
-            if(err){
-                console.log('error creating a board: ', err);
-                return res.status(500).json({
-                    message: err
-                });
-            }
-             res.status(201).send({
-                message: 'New Board Created'
-             });
+app.post('/newBoard', function(req, res) {
+    Board.create({
+        title: req.body.title
+    }, function(err, board) {
+        if (err) {
+            console.log('error creating a board: ', err);
+            return res.status(500).json({
+                message: err
+            });
+        }
+        res.status(201).send({
+            message: 'New Board Created'
         });
+    });
 });
 
-/* #4: Get the contents for an Specific Board */
+/* #4: Get the contents for an Specific Board - FINISH SORTING IDEAS */
 
-app.get('/:boardTitle', function(req, res){
-    console.log('req.params.boardTitle', req.params.boardTitle);
-    Board.findOne({ title: req.params.boardTitle }, function(err, board){
-        if(err){
-                console.log('Board not found: ', err);
-                return res.status(500).json({
-                    message: err
-                });
-            }
+app.get('/:boardTitle', function(req, res) {
+    // console.log('req.params.boardTitle', req.params.boardTitle);
+    Board.findOne({
+        title: req.params.boardTitle
+    }, function(err, board) {
+        if (err) {
+            console.log('Board not found: ', err);
+            return res.status(500).json({
+                message: err
+            });
+        }
         console.log('found board ', board);
         res.json(board);
     });
     //#TODO: sort Ideas comming from with the selected Board.
 });
+
+/* #5: CREATE A NEW IDEA - REDIRECT TO ENDPOINT #4 */
+
+app.post('/:boardTitle/newIdea', function(req, res) {
+    console.log('req.params.boardTitle', req.params.boardTitle);
+    console.log('req.body.ideaTitle', req.body.ideaTitle);
+
+    console.log('---STEP 1: Select the Board to alocate the new Idea---');
+    Board.findOne({
+        title: req.params.boardTitle
+    }, function(err, board) {
+        if (err) {
+            console.log('Board not found: ', err);
+            return res.status(500).json({
+                message: err
+            });
+        }
+        console.log('Board before newIdea is Added: ', board);
+
+        console.log('---STEP 2: Create the new Idea new Idea---');
+        var newIdea = new Idea({
+            ideaTitle: req.body.ideaTitle
+        });
+
+        console.log('---STEP 3: Save the new Idea new Idea---');
+        newIdea.save(function(err, item) {
+            if (err) {
+                console.log(err);
+            }
+            console.log('new idea', newIdea);
+        });
+
+        console.log('---STEP 4: Push the New Idea to the Board.ideas Array---');
+        board.ideas.push(newIdea);
+        console.log('Board after pushing idea but no saved: ', board);
+
+        console.log('---STEP 5: Save the board with its new Contents---');
+        board.save(function(err, boardUpdate) {
+            if (err) {
+                console.log('update error ', err);
+            }
+            console.log('board after ideas added: ', boardUpdate);
+        });
+    });
+
+    console.log('---STEP 6: Populate the Board with actual content of the NewIdea---');
+    Board.findOne({
+        title: req.params.boardTitle
+    }).populate('ideas').exec(function(err, boardPopulated) {
+        if (err) {
+            console.log('error populate', err);
+        }
+        // console.log(JSON.stringify(boards, null, 2));
+        console.log('Updated Board after populated: ', boardPopulated);
+    });
+
+    res.status(201).json(Board);
+
+    //#TODO REDIRECT TO ENDPOINT #4
+
+});
+
 
 /*ENDPOINTS FINISH HERE */
 
@@ -96,9 +160,9 @@ var runServer = function(callback) {
         if (err && callback) {
             return callback(err);
         }
-    mongoose.connection.on('error', function(err) {
-    console.error('Could not connect.  Error:', err);
-    });
+        mongoose.connection.on('error', function(err) {
+            console.error('Could not connect.  Error:', err);
+        });
         app.listen(config.PORT, function() {
             console.log('Listening on localhost:' + config.PORT);
             if (callback) {
@@ -120,47 +184,37 @@ if (require.main === module) {
 
 
 
-var DummyData = [
-    {
+var DummyData = [{
+    id: 1,
+    title: 'Board1',
+    items: [{
         id: 1,
-        title: 'Board1',
-        items: [
-            {
-                id: 1,
-                itemTitle: 'Idea1 of Board1',
-                voteCount: 5
-            },
-            {
-                id: 2,    
-                itemTitle: 'Idea2 of Board1',
-                voteCount: 4
-            },
-            {
-                id: 3,
-                itemTitle: 'Idea3 of Board1',
-                voteCount: 7
-            }
-        ]
-
-    },
-    {
+        itemTitle: 'Idea1 of Board1',
+        voteCount: 5
+    }, {
         id: 2,
-        title: 'Board2',
-        items: [
-            {
-                id: 1,
-                itemTitle: 'Idea1 of Board2',
-                voteCount: 4
-            },
-            {
-                id: 2,    
-                itemTitle: 'Idea1 of Board2',
-                voteCount: 8
-            }
-        ]
+        itemTitle: 'Idea2 of Board1',
+        voteCount: 4
+    }, {
+        id: 3,
+        itemTitle: 'Idea3 of Board1',
+        voteCount: 7
+    }]
 
-    }
-];
+}, {
+    id: 2,
+    title: 'Board2',
+    items: [{
+        id: 1,
+        itemTitle: 'Idea1 of Board2',
+        voteCount: 4
+    }, {
+        id: 2,
+        itemTitle: 'Idea1 of Board2',
+        voteCount: 8
+    }]
+
+}];
 
 /*
  GET ENDPOINT TO:
@@ -175,8 +229,10 @@ app.get('/boards', function(request, response) {
  POST ENDPOINT TO:
     add a new item in a given board
  */
-app.post('/boards', function(request, response){
-    DummyData[0].items.push({itemTitle: request.body.itemTitle});
+app.post('/boards', function(request, response) {
+    DummyData[0].items.push({
+        itemTitle: request.body.itemTitle
+    });
     response.status(201).json("it worked!");
 });
 
@@ -185,12 +241,12 @@ app.post('/boards', function(request, response){
     update the Voting Count of an item 
  */
 
-app.put('/:boardId/:itemId', function(request, response){
+app.put('/:boardId/:itemId', function(request, response) {
 
-   console.log(' DummyData[request.params.boardId].items[request.params.itemId] ',  DummyData[request.params.boardId].items[request.params.itemId].voteCount );
-   console.log('request.body.voteCount ', request.body.voteCount);
+    console.log(' DummyData[request.params.boardId].items[request.params.itemId] ', DummyData[request.params.boardId].items[request.params.itemId].voteCount);
+    console.log('request.body.voteCount ', request.body.voteCount);
 
-   DummyData[request.params.boardId].items[request.params.itemId].voteCount = request.body.voteCount;
+    DummyData[request.params.boardId].items[request.params.itemId].voteCount = request.body.voteCount;
 
     response.json(DummyData);
 });
@@ -200,4 +256,4 @@ app.put('/:boardId/:itemId', function(request, response){
 
 
 exports.app = app;
-exports.runServer= runServer;
+exports.runServer = runServer;
