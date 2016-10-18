@@ -51,10 +51,9 @@ app.get('/boardTitles', function(req, res) {
 });
 
 
-/* #2: CREATE A NEW BOARD */
+/* #3: CREATE A NEW BOARD */
 
 app.post('/newBoard', function(req, res){
-
      Board.create({
             title: req.body.title
         }, function(err, board){
@@ -70,6 +69,22 @@ app.post('/newBoard', function(req, res){
         });
 });
 
+/* #4: Get the contents for an Specific Board */
+
+app.get('/:boardTitle', function(req, res){
+    console.log('req.params.boardTitle', req.params.boardTitle);
+    Board.findOne({ title: req.params.boardTitle }, function(err, board){
+        if(err){
+                console.log('Board not found: ', err);
+                return res.status(500).json({
+                    message: err
+                });
+            }
+        console.log('found board ', board);
+        res.json(board);
+    });
+    //#TODO: sort Ideas comming from with the selected Board.
+});
 
 /*ENDPOINTS FINISH HERE */
 
