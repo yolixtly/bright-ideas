@@ -14,40 +14,50 @@ let app = express();
 /* Middleware */
 app.use(jsonParser);
 
+/*Constructor for idea*/
+
+function Idea(title, voteCount){
+    this.ideaTitle = title;
+    this.voteCount = voteCount;
+}
+
 /*create a sample Board: it Works! */
 
 // Board.create({
-//  title: 'Board3'
+//  title: 'TestBoard'
 // }, function(err, board){
+//     if(err){
+//     console.log(err);
+//     }
 //     console.log(board);
 // });
 
-// Board.findOne({title: 'Board2'}).populate('ideas').exec(function(err, boards){
+/*Finds a Board and Creates a new Idea: it Works! */
+Board.findOne({title: 'TestBoard'}, function(err, board){
+    if(err){
+        console.log(err);
+    }
+    console.log('Board Found: ', board._id);
 
-// });
-// 
-//Creates a new Board
-// var vacationsBoard = new Board ({_id: 0, name: 'VacationsBoard'});
-// console.log(vacationsBoard);
-// vacationsBoard.save(function(err){
-//     if(err){
-//         console.log('Board Creation error: ', err);
-//         return err;
-//     }
+    Idea.create({
+        _creator: board._id,
+        ideaTitle: 'testIdea',
+        voteCount: 5
+    }, function(err, idea){
+        if(err){
+            console.log('idea error ', err);
+        }
+        console.log(idea);
+    });
+});
 
-    // var maldives = new Idea({
-    //     _creator: vacationsBoard._id,
-    //     ideaTitle: 'Maldives',
-    //     voteCount: 5
-    // });
+/*Lets us see the data of both Board and Idea in the Console but Idea is outside Board.ideas*/
+Board.findOne({title: 'TestBoard'}).populate('ideas').exec(function(err, boards){
+console.log(JSON.stringify(boards, null, 2));
+});
 
-    // maldives.save(function(err){
-    //     if(err){
-    //         console.log('idea Creation error: ', err);
-    //         return err;
-    //     }
-    // });
-// });
+
+
 
 /*Connection to MongoDB/mongoose */
 var runServer = function(callback) {
