@@ -6,6 +6,7 @@ var jsonParser = bodyParser.json();
 var mongoose = require('mongoose');
 var config = require('./config');
 var Board = require('./models/board');
+var Idea = require('./models/idea');
 
 
 let app = express();
@@ -13,10 +14,39 @@ let app = express();
 /* Middleware */
 app.use(jsonParser);
 
-/*create a sample Board: */
+/*create a sample Board: it Works! */
 
-// Board.create({ title: 'Board1'}, function(err, board){
+// Board.create({
+//  title: 'Board3'
+// }, function(err, board){
 //     console.log(board);
+// });
+
+// Board.findOne({title: 'Board2'}).populate('ideas').exec(function(err, boards){
+
+// });
+// 
+//Creates a new Board
+// var vacationsBoard = new Board ({_id: 0, name: 'VacationsBoard'});
+// console.log(vacationsBoard);
+// vacationsBoard.save(function(err){
+//     if(err){
+//         console.log('Board Creation error: ', err);
+//         return err;
+//     }
+
+    // var maldives = new Idea({
+    //     _creator: vacationsBoard._id,
+    //     ideaTitle: 'Maldives',
+    //     voteCount: 5
+    // });
+
+    // maldives.save(function(err){
+    //     if(err){
+    //         console.log('idea Creation error: ', err);
+    //         return err;
+    //     }
+    // });
 // });
 
 /*Connection to MongoDB/mongoose */
