@@ -11,8 +11,69 @@ var relationship = require("mongoose-relationship");
 
 let app = express();
 
-/* Middleware */
+/*Connecting to index in build */
+app.use('/', express.static('build'));
+
+/* Middleware injected to all endpoints */
 app.use(jsonParser);
+
+/*ENDPOINTS BEGIN HERE */
+
+/* #1: GET ALL THE BOARDS and ITS CONTENT */
+app.get('/boards', function(req, res) {
+
+    Board.find(function(err, boards){
+        if(err){
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+        res.send(boards);
+    });
+});
+
+/* #2: GET ONLY ALL THE BOARDS TITLES */
+
+app.get('/boardTitles', function(req, res) {
+
+    Board.find(function(err, boards){
+        if(err){
+            return res.status(500).json({
+                message: 'Internal Server Error'
+            });
+        }
+    var boardTitles = []; 
+    for(var i = 0; i < boards.length; i++){
+        boardTitles.push(boards[i].title);
+    }
+    res.json(boardTitles);
+    });
+});
+
+
+/* #2: CREATE A NEW BOARD */
+
+app.post('/newBoard', function(req, res){
+
+     Board.create({
+            title: req.body.title
+        }, function(err, board){
+            if(err){
+                console.log('error creating a board: ', err);
+                return res.status(500).json({
+                    message: err
+                });
+            }
+             res.status(201).send({
+                message: 'New Board Created'
+             });
+        });
+});
+
+
+/*ENDPOINTS FINISH HERE */
+
+
 
 /*Connection to MongoDB/mongoose */
 var runServer = function(callback) {
@@ -39,8 +100,10 @@ if (require.main === module) {
     });
 };
 
-/*Connecting to index in build */
-app.use('/', express.static('build'));
+
+
+
+
 
 var DummyData = [
     {
@@ -83,11 +146,6 @@ var DummyData = [
 
     }
 ];
-
-// const HOST = process.env.HOST;
-// const PORT = process.env.PORT || 8080;
-
-// console.log(`Server running in ${process.env.NODE_ENV} mode`);
 
 /*
  GET ENDPOINT TO:
