@@ -5,6 +5,7 @@ var jsonParser = bodyParser.json();
 
 var mongoose = require('mongoose');
 var config = require('./config');
+var Board = require('./models/board');
 
 
 let app = express();
@@ -12,6 +13,11 @@ let app = express();
 /* Middleware */
 app.use(jsonParser);
 
+/*create a sample Board: */
+
+// Board.create({ title: 'Board1'}, function(err, board){
+//     console.log(board);
+// });
 
 /*Connection to MongoDB/mongoose */
 var runServer = function(callback) {
@@ -19,7 +25,9 @@ var runServer = function(callback) {
         if (err && callback) {
             return callback(err);
         }
-        
+    mongoose.connection.on('error', function(err) {
+    console.error('Could not connect.  Error:', err);
+    });
         app.listen(config.PORT, function() {
             console.log('Listening on localhost:' + config.PORT);
             if (callback) {
