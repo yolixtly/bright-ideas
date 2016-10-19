@@ -88,8 +88,8 @@ app.get('/:boardTitle', function(req, res) {
 app.post('/:boardTitle/newIdea', function(req, res) {
     console.log('req.params.boardTitle', req.params.boardTitle);
     console.log('req.body.ideaTitle', req.body.ideaTitle);
-
     console.log('---STEP 1: Select the Board to alocate the new Idea---');
+    //#TODO Refactor with findOneAndUpdate ??
     Board.findOne({
         title: req.params.boardTitle
     }, function(err, board) {
@@ -105,7 +105,6 @@ app.post('/:boardTitle/newIdea', function(req, res) {
         var newIdea = new Idea({
             ideaTitle: req.body.ideaTitle
         });
-
         console.log('---STEP 3: Save the new Idea new Idea---');
         newIdea.save(function(err, item) {
             if (err) {
@@ -125,6 +124,7 @@ app.post('/:boardTitle/newIdea', function(req, res) {
             }
             console.log('board after ideas added: ', boardUpdate);
         });
+        // res.redirect('/:boardTitle');
     });
 
     //#TODO REDIRECT TO ENDPOINT #4
@@ -144,28 +144,13 @@ app.post('/:boardTitle/newIdea', function(req, res) {
 
 });
 
-/* #6: Get specific Idea */
+/* #6: Update Vote count specific Idea - REDIRECT TO ENDPOINT #4 */
 
-app.get('/:boardTitle/:ideaTitle', function(req, res) {
-    console.log('req.params.boardTitle', req.params.boardTitle);
+app.put('/voteCount/:ideaTitle', function(req, res) {
     console.log('req.params.ideaTitle', req.params.ideaTitle);
-  
-    // Board.find({
-    //     title: req.params.boardTitle,
-    //     'ideas.ideaTitle': req.params.ideaTitle
-    // }).populate('ideas').exec(function(err, board) {
-    //     if (err) {
-    //         console.log('Board not found: ', err);
-    //         return res.status(500).json({
-    //             message: err
-    //         });
-    //     }
-    //     console.log('Found Idea', board);
-    //     // res.json(board.ideas);
-    // });
 
     Idea.findOne({
-         'ideaTitle': req.params.ideaTitle
+         ideaTitle: req.params.ideaTitle
     }, function(err, Idea) {
         if (err) {
             console.log('Idea not found: ', err);
@@ -173,12 +158,21 @@ app.get('/:boardTitle/:ideaTitle', function(req, res) {
                 message: err
             });
         }
-        console.log('Found Idea', Idea);
-        // res.json(board.ideas);
-    }); //returns NULL 
+        var oldCount = Idea.voteCount;
+        var newCount = oldCount+1;
+        console.log('Idea.voteCount before', Idea.voteCount);
 
-   
-    // console.log(foundIdea);
+        console.log('oldCount', oldCount);
+        console.log('newCount', newCount);
+
+        Idea.voteCount = newCount;
+
+        Idea.save();
+
+        console.log('Idea.voteCount after', Idea.voteCount);
+
+        res.json(Idea);
+    }); 
 });
 
 /*ENDPOINTS FINISH HERE */
