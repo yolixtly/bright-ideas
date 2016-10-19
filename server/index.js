@@ -21,14 +21,13 @@ app.use(jsonParser);
 
 /* #1: GET ALL THE BOARDS and ITS CONTENT - DONE */
 app.get('/boards', function(req, res) {
-
-    Board.find(function(err, boards) {
+    Board.find().populate('ideas').exec(function(err, boardPopulated) {
         if (err) {
-            return res.status(500).json({
-                message: 'Internal Server Error'
-            });
+            console.log('error populate', err);
         }
-        res.send(boards);
+        // console.log(JSON.stringify(boards, null, 2));
+        console.log('Updated Board after populated: ', boardPopulated);
+        res.status(200).json(boardPopulated);
     });
 });
 
@@ -49,7 +48,6 @@ app.get('/boardTitles', function(req, res) {
         res.json(boardTitles);
     });
 });
-
 
 /* #3: CREATE A NEW BOARD - DONE */
 
@@ -75,15 +73,13 @@ app.get('/:boardTitle', function(req, res) {
     // console.log('req.params.boardTitle', req.params.boardTitle);
     Board.findOne({
         title: req.params.boardTitle
-    }, function(err, board) {
+    }).populate('ideas').exec(function(err, boardPopulated) {
         if (err) {
-            console.log('Board not found: ', err);
-            return res.status(500).json({
-                message: err
-            });
+            console.log('error populate', err);
         }
-        console.log('found board ', board);
-        res.json(board);
+        // console.log(JSON.stringify(boards, null, 2));
+        console.log('Updated Board after populated: ', boardPopulated);
+        res.status(201).json(boardPopulated);
     });
     //#TODO: sort Ideas comming from with the selected Board.
 });
@@ -132,6 +128,9 @@ app.post('/:boardTitle/newIdea', function(req, res) {
         });
     });
 
+    //#TODO REDIRECT TO ENDPOINT #4
+    //If redirect Doesnt work, make sure that the res.status 
+    //includes the new Item, that was just added
     console.log('---STEP 6: Populate the Board with actual content of the NewIdea---');
     Board.findOne({
         title: req.params.boardTitle
@@ -141,14 +140,44 @@ app.post('/:boardTitle/newIdea', function(req, res) {
         }
         // console.log(JSON.stringify(boards, null, 2));
         console.log('Updated Board after populated: ', boardPopulated);
+        res.status(201).json(boardPopulated);
     });
-
-    res.status(201).json(Board);
-
-    //#TODO REDIRECT TO ENDPOINT #4
 
 });
 
+/* #6: Get specific Idea */
+
+// app.get('/:boardTitle/:ideaTitle', function(req, res) {
+//     console.log('req.params.boardTitle', req.params.boardTitle);
+//     console.log('req.params.ideaTitle', req.params.ideaTitle);
+
+//     //first populate the Board and Find the Entire Board 
+//      Board.findOne({
+//         title: req.params.boardTitle
+//     }).populate('ideas').exec(function(err, board) {
+//         if (err) {
+//             console.log('error populate', err);
+//         }
+//         // console.log(JSON.stringify(boards, null, 2));
+//         console.log('Updated Board after populated: ', board);
+//         console.log('found board Ideas', board.ideas);
+//         res.json(board.ideas);
+
+//     Board.findOne({
+//         title: req.params.boardTitle
+//     }, function(err, board) {
+//         if (err) {
+//             console.log('Board not found: ', err);
+//             return res.status(500).json({
+//                 message: err
+//             });
+//         }
+//         console.log('found board Ideaas', board.ideas);
+//         res.json(board.ideas);
+//     });
+//     });
+
+// });
 
 /*ENDPOINTS FINISH HERE */
 
