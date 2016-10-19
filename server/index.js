@@ -34,7 +34,6 @@ app.get('/boards', function(req, res) {
 /* #2: GET ONLY ALL THE BOARDS TITLES - DONE */
 
 app.get('/boardTitles', function(req, res) {
-
     Board.find(function(err, boards) {
         if (err) {
             return res.status(500).json({
@@ -147,37 +146,40 @@ app.post('/:boardTitle/newIdea', function(req, res) {
 
 /* #6: Get specific Idea */
 
-// app.get('/:boardTitle/:ideaTitle', function(req, res) {
-//     console.log('req.params.boardTitle', req.params.boardTitle);
-//     console.log('req.params.ideaTitle', req.params.ideaTitle);
+app.get('/:boardTitle/:ideaTitle', function(req, res) {
+    console.log('req.params.boardTitle', req.params.boardTitle);
+    console.log('req.params.ideaTitle', req.params.ideaTitle);
+  
+    // Board.find({
+    //     title: req.params.boardTitle,
+    //     'ideas.ideaTitle': req.params.ideaTitle
+    // }).populate('ideas').exec(function(err, board) {
+    //     if (err) {
+    //         console.log('Board not found: ', err);
+    //         return res.status(500).json({
+    //             message: err
+    //         });
+    //     }
+    //     console.log('Found Idea', board);
+    //     // res.json(board.ideas);
+    // });
 
-//     //first populate the Board and Find the Entire Board 
-//      Board.findOne({
-//         title: req.params.boardTitle
-//     }).populate('ideas').exec(function(err, board) {
-//         if (err) {
-//             console.log('error populate', err);
-//         }
-//         // console.log(JSON.stringify(boards, null, 2));
-//         console.log('Updated Board after populated: ', board);
-//         console.log('found board Ideas', board.ideas);
-//         res.json(board.ideas);
+    Idea.findOne({
+         'ideaTitle': req.params.ideaTitle
+    }, function(err, Idea) {
+        if (err) {
+            console.log('Idea not found: ', err);
+            return res.status(500).json({
+                message: err
+            });
+        }
+        console.log('Found Idea', Idea);
+        // res.json(board.ideas);
+    }); //returns NULL 
 
-//     Board.findOne({
-//         title: req.params.boardTitle
-//     }, function(err, board) {
-//         if (err) {
-//             console.log('Board not found: ', err);
-//             return res.status(500).json({
-//                 message: err
-//             });
-//         }
-//         console.log('found board Ideaas', board.ideas);
-//         res.json(board.ideas);
-//     });
-//     });
-
-// });
+   
+    // console.log(foundIdea);
+});
 
 /*ENDPOINTS FINISH HERE */
 
