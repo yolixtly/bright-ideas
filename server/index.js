@@ -26,7 +26,7 @@ app.use('/', express.static(process.env.CLIENT_PATH));
 app.use(jsonParser);
 
 /* #1: GET ALL THE BOARDS and ITS CONTENT - DONE */
-app.get('/boards', function(req, res) {
+app.get('/api/boards', function(req, res) {
     Board.find().populate('ideas').exec(function(err, boardPopulated) {
         if (err) {
             console.log('error populate', err);
@@ -39,7 +39,7 @@ app.get('/boards', function(req, res) {
 
 /* #2: GET ONLY ALL THE BOARDS TITLES - DONE */
 
-app.get('/boardTitles', function(req, res) {
+app.get('/api/boardTitles', function(req, res) {
     Board.find(function(err, boards) {
         if (err) {
             return res.status(500).json({
@@ -56,7 +56,7 @@ app.get('/boardTitles', function(req, res) {
 
 /* #3: CREATE A NEW BOARD - DONE */
 
-app.post('/newBoard', function(req, res) {
+app.post('/api/newBoard', function(req, res) {
     Board.create({
         title: req.body.title
     }, function(err, board) {
@@ -74,7 +74,7 @@ app.post('/newBoard', function(req, res) {
 
 /* #4: Get the contents for an Specific Board - FINISH SORTING IDEAS */
 
-app.get('/:boardTitle', function(req, res) {
+app.get('/api/:boardTitle', function(req, res) {
     // console.log('req.params.boardTitle', req.params.boardTitle);
     Board.findOne({
         title: req.params.boardTitle
@@ -91,7 +91,7 @@ app.get('/:boardTitle', function(req, res) {
 
 /* #5: CREATE A NEW IDEA - REDIRECT TO ENDPOINT #4 */
 
-app.post('/:boardTitle/newIdea', function(req, res) {
+app.post('/api/:boardTitle/newIdea', function(req, res) {
     console.log('req.params.boardTitle', req.params.boardTitle);
     console.log('req.body.ideaTitle', req.body.ideaTitle);
     console.log('---STEP 1: Select the Board to alocate the new Idea---');
@@ -152,7 +152,7 @@ app.post('/:boardTitle/newIdea', function(req, res) {
 
 /* #6: Update Vote count specific Idea - REDIRECT TO ENDPOINT #4 */
 
-app.put('/voteCount/:ideaTitle', function(req, res) {
+app.put('/api/voteCount/:ideaTitle', function(req, res) {
     console.log('req.params.ideaTitle', req.params.ideaTitle);
 
     Idea.findOne({
