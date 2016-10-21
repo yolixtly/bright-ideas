@@ -12,8 +12,6 @@ var Form = React.createClass({
 		this.refs.theInput.value = '';
 	},
 	render: function(){
-		var boardTitles = this.props.boardTitles;
-		console.log(boardTitles, 'boardTitles in form');
 		var boardTitles = this.props.boardTitles.map(function(title, index){
 			return (
 				<option key={index} value={title}>{title}</option>

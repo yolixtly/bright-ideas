@@ -1,0 +1,71 @@
+body {
+	background-color: #f0f0f0;
+}
+
+.wrapper {
+	// border: solid 0.03em green;
+}
+
+.LandingPage h1 {
+font-family: 'Yesteryear', cursive !important;	
+font-size: 6em;
+text-align: center;
+margin: 0 0 0 0;
+padding: 1em 0 0.4em 0;
+}
+
+.Form {
+	margin: 0 auto;
+	width: 50%;
+	font-family: 'Quicksand', sans-serif;
+}
+
+.Form input {
+	width: 4em;
+	height: 2em;
+	font-size: 2em;
+	outline: none;
+	border-color: green;
+}
+.Form button {
+	height: 6.3em;
+}
+
+.Form select {
+	border: 0;
+   color: #EEE;
+   background: transparent;
+   font-size: 20px;
+   font-weight: bold;
+   padding: 5px 10px;
+   width: 430px !important;
+   width: 350px;
+   background: #58B14C;
+   -webkit-appearance: none;
+   outline: none;
+}
+
+.LandingPage {
+	text-align: center;
+}
+
+.LandingPage h3 {
+	margin: 0 auto;
+	padding: 0 0 1em 0;
+	font-family: 'Quicksand', sans-serif;
+	font-size: 2.5em;
+
+}
+
+.ButtonBoard{
+	display: inline-block;
+	margin: 0 0.7em 0 0.7em;
+}
+
+.ButtonBoard a{
+	color: white;	
+}
+
+.boardbtn {
+	font-size: 2em !important;
+}

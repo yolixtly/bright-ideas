@@ -30,7 +30,6 @@ var fetchAllTitles = function(){
 			return response.json();
 		})
 		.then(function(titles){
-			console.log("fetchTitles Success in Actions: ", titles);
 			return dispatch(
 				fetchAllTitlesSuccess(titles)
 			);

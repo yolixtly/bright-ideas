@@ -8,12 +8,15 @@ var initialState = {
 var reducer = function(state, action){
 	state = state || initialState;
 	if(action.type === actions.FETCH_ALL_TITLES_SUCCESS){
-		console.log("fetch titles reducer", action.data);
 		var newState = update(state, {
 			boardTitles: {$set : action.data}
 		});
-		console.log('newState', newState);
 		return newState;
+	}
+	if(action.type === actions.FETCH_ALL_TITLES_ERROR){
+		return {
+			error: action.error
+		}
 	}
 	return state;
 };
