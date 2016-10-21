@@ -47,10 +47,10 @@ var fetchAllTitles = function(){
 
 /* ADD A NEW IDEA ACTIONS */
 
-var addNewIdeaSuccess = function(titles){
+var addNewIdeaSuccess = function(data){
 	return {
 		type: ADD_NEW_IDEA_SUCCESS,
-		data: titles
+		data: data
 	};
 };
 var addNewIdeaError = function(error){

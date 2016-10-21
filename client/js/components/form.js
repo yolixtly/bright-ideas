@@ -28,7 +28,7 @@ var Form = React.createClass({
 					{boardTitles}
 				</select>
 				<span className="input-group-btn">
-					<a href="/#/BoardPage"><button type='submit' className="btn btn-success">Share your Idea!</button></a>
+					<button type='submit' className="btn btn-success">Share your Idea!</button>
 				</span>
 			</form>
 		</div>

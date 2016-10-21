@@ -9,10 +9,16 @@ var LandingPage = React.createClass({
 	componentWillMount: function(){
 		this.props.dispatch(actions.fetchAllTitles());
 	},
+	contextTypes: {
+		router: React.PropTypes.object.isRequired
+	},
 	onTodoSubmit: function(newIdea, selectedBoard){
 		console.log('New Idea is: ', newIdea);
 		console.log('Selected Board where New Idea will be stored: ', selectedBoard);
 		this.props.dispatch(actions.addNewIdea(newIdea, selectedBoard));
+		//using window.location is not the best practice, instead use the context.router
+		// window.location = '/#/BoardPage'; 
+		this.context.router.push('/BoardPage');
 	},
 	render: function(){
 		var buttonBoards = this.props.boardTitles.map(function(titles, index){
