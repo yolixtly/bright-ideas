@@ -145,8 +145,10 @@ app.post('/api/:boardTitle/newIdea', function(req, res) {
         }
         // console.log(JSON.stringify(boards, null, 2));
         console.log('Updated Board after populated: ', boardPopulated);
-        // res.status(201).json(boardPopulated);
-        res.redirect('/api/'+boardPopulated.title);
+        res.status(201).json({
+            message: "You just added a new Idea!"
+        });
+        // res.redirect('/api/'+boardPopulated.title);
  
     });
 });

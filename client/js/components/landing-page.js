@@ -12,7 +12,7 @@ var LandingPage = React.createClass({
 	onTodoSubmit: function(newIdea, selectedBoard){
 		console.log('New Idea is: ', newIdea);
 		console.log('Selected Board where New Idea will be stored: ', selectedBoard);
-		// this.props.dispatch(actions.addNewIdea(newIdea, selectedBoard));
+		this.props.dispatch(actions.addNewIdea(newIdea, selectedBoard));
 	},
 	render: function(){
 		var buttonBoards = this.props.boardTitles.map(function(titles, index){

@@ -4,7 +4,7 @@ var ButtonBoard = React.createClass({
 	render: function(){
 	return (
 		<div className="ButtonBoard wrapper">
-			<button type='submit' className="btn btn-success boardbtn"><a href="/#/BoardPage">{this.props.value}</a></button>
+			<a href="/#/BoardPage"><button type='submit' className="btn btn-success boardbtn">{this.props.value}</button></a>
 		</div>
 	);
 }});
