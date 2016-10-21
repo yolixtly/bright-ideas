@@ -47,10 +47,11 @@ var fetchAllTitles = function(){
 
 /* ADD A NEW IDEA ACTIONS */
 
-var addNewIdeaSuccess = function(data){
+var addNewIdeaSuccess = function(boardBody){
+	console.log(boardBody);
 	return {
 		type: ADD_NEW_IDEA_SUCCESS,
-		data: data
+		data: boardBody
 	};
 };
 var addNewIdeaError = function(error){
