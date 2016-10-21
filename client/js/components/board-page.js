@@ -5,14 +5,17 @@ var actions = require('../actions');
 var Idea = require('./idea.js');
 
 var BoardPage = React.createClass({
-	handleUpVote(){
-		//TODO: Dispatch action to update vote status
-		console.log("here we are updating your vote!");
+	handleUpVote(ideaTitle){
+		var boardTitle = this.props.BoardTitle;
+		this.props.dispatch(actions.updateVoteCount(ideaTitle, boardTitle));
+		this.props.dispatch(actions.fetchABoard(boardTitle));
+		
 	},
 	render: function(){
+		var self = this;
 		var ideaList = this.props.BoardIdeas.map(function(idea, index){
 			return (
-				<Idea key={index} votes={idea.voteCount} ideaTitle={idea.ideaTitle}/>
+				<Idea key={index} votes={idea.voteCount} ideaTitle={idea.ideaTitle} handleUpVote={self.handleUpVote}/>
 			)
 		});
 		return (

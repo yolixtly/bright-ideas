@@ -48,6 +48,15 @@ var reducer = function(state, action){
 			error: action.error
 		}
 	}
+	/* On Click on Board Buttons, get the new Board content and update it*/
+	if(action.type === actions.UPDATE_VOTECOUNT_IDEA_SUCCESS){
+			return state;
+	}
+	if(action.type === actions.UPDATE_VOTECOUNT_IDEA_ERROR){
+		return {
+			error: action.error
+		}
+	}
 	return state;
 };
 

@@ -155,8 +155,10 @@ app.post('/api/:boardTitle/newIdea', function(req, res) {
 
 /* #6: Update Vote count specific Idea - REDIRECT TO ENDPOINT #4 */
 
-app.put('/api/voteCount/:ideaTitle', function(req, res) {
+app.put('/api/:boardTitle/voteCount/:ideaTitle', function(req, res) {
     console.log('req.params.ideaTitle', req.params.ideaTitle);
+    console.log('req.params.boardTitle', req.params.boardTitle);
+
 
     Idea.findOne({
         ideaTitle: req.params.ideaTitle
@@ -169,19 +171,26 @@ app.put('/api/voteCount/:ideaTitle', function(req, res) {
         }
         var oldCount = Idea.voteCount;
         var newCount = oldCount + 1;
-        console.log('Idea.voteCount before', Idea.voteCount);
+        // console.log('Idea.voteCount before', Idea.voteCount);
 
-        console.log('oldCount', oldCount);
-        console.log('newCount', newCount);
+        // console.log('oldCount', oldCount);
+        // console.log('newCount', newCount);
 
         Idea.voteCount = newCount;
 
         Idea.save();
 
-        console.log('Idea.voteCount after', Idea.voteCount);
-
+        // console.log('Idea.voteCount after', Idea.voteCount);
+        // console.log('Board Title --> ', req.params.boardTitle);
+    var boardTitle = req.params.boardTitle;
+        
         res.json(Idea);
+        // res.redirect('/api/'+boardTitle);
+        
     });
+    // var boardTitle = req.params.boardTitle;
+    //     res.redirect('/api/'+boardTitle);but 
+
 });
 
 /*ENDPOINTS FINISH HERE */
