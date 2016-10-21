@@ -129,8 +129,8 @@ app.post('/api/:boardTitle/newIdea', function(req, res) {
                 console.log('update error ', err);
             }
             console.log('board after ideas added: ', boardUpdate);
+
         });
-        // res.redirect('/:boardTitle');
     });
 
     //#TODO REDIRECT TO ENDPOINT #4
@@ -145,9 +145,10 @@ app.post('/api/:boardTitle/newIdea', function(req, res) {
         }
         // console.log(JSON.stringify(boards, null, 2));
         console.log('Updated Board after populated: ', boardPopulated);
-        res.status(201).json(boardPopulated);
+        // res.status(201).json(boardPopulated);
+        res.redirect('/api/'+boardPopulated.title);
+ 
     });
-
 });
 
 /* #6: Update Vote count specific Idea - REDIRECT TO ENDPOINT #4 */
@@ -156,7 +157,7 @@ app.put('/api/voteCount/:ideaTitle', function(req, res) {
     console.log('req.params.ideaTitle', req.params.ideaTitle);
 
     Idea.findOne({
-         ideaTitle: req.params.ideaTitle
+        ideaTitle: req.params.ideaTitle
     }, function(err, Idea) {
         if (err) {
             console.log('Idea not found: ', err);
@@ -165,7 +166,7 @@ app.put('/api/voteCount/:ideaTitle', function(req, res) {
             });
         }
         var oldCount = Idea.voteCount;
-        var newCount = oldCount+1;
+        var newCount = oldCount + 1;
         console.log('Idea.voteCount before', Idea.voteCount);
 
         console.log('oldCount', oldCount);
@@ -178,7 +179,7 @@ app.put('/api/voteCount/:ideaTitle', function(req, res) {
         console.log('Idea.voteCount after', Idea.voteCount);
 
         res.json(Idea);
-    }); 
+    });
 });
 
 /*ENDPOINTS FINISH HERE */
@@ -186,13 +187,13 @@ app.put('/api/voteCount/:ideaTitle', function(req, res) {
 function runServer(callback) {
     return new Promise((resolve, reject) => {
         mongoose.connect(DATABASE_URL, function(err) {
-        if (err && callback) {
-            return callback(err);
-        }
-        mongoose.connection.on('error', function(err) {
-            console.error('Could not connect.  Error:', err);
-        });
-    })
+            if (err && callback) {
+                return callback(err);
+            }
+            mongoose.connection.on('error', function(err) {
+                console.error('Could not connect.  Error:', err);
+            });
+        })
         app.listen(PORT, HOST, (err) => {
             if (err) {
                 console.error(err);
@@ -205,10 +206,9 @@ function runServer(callback) {
 }
 
 if (require.main === module) {
-    runServer(err =>{
-        if(err){
+    runServer(err => {
+        if (err) {
             console.log(err)
         }
     })
 }
-

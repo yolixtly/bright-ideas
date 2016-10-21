@@ -13,7 +13,6 @@ var BoardPage = React.createClass({
 		return (
 			<div className="BoardPage wrapper">
 				<h1>Board Page</h1>
-				{this.props.test2}
 			</div>
 		);
 	}
@@ -21,8 +20,7 @@ var BoardPage = React.createClass({
 
 var mapStateToProps = function(state, props){
 	return {
-		test : state.test,
-		test2: state.test2
+
 	}
 };
 

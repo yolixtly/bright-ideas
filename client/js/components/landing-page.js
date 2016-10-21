@@ -7,6 +7,10 @@ var Form = require('./form.js');
 
 
 var LandingPage = React.createClass({
+	componentWillMount: function(){
+		this.props.dispatch(actions.fetchAllTitles());
+		
+	},
 	onTodoSubmit: function(newIdea, selectedBoard){
 		console.log('New Idea is: ', newIdea);
 		console.log('Selected Board where New Idea will be stored: ', selectedBoard)

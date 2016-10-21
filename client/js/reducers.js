@@ -1,15 +1,13 @@
 var actions = require('./actions');
 
 var initialState = {
-	test : "hello From reducer!",
-	test2: "What up!"
+	boardtitles: []
 };
 
 var reducer = function(state, action){
 	state = state || initialState;
-	return {
-		test: 'Hey there!',
-		test2:  "What up!"
+	if(action.type === actions.FETCH_ALL_TITLES_SUCCESS){
+		console.log(action);
 	}
 };
 
