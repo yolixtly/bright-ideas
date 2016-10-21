@@ -1,9 +1,13 @@
 var actions = require('./actions');
 
-var initialState = {};
+var initialState = {
+	test : "hello From reducer!"
+};
 
 var reducer = function(state, action){
-	return state;
+	return {
+		test: 'Hey there!'
+	}
 };
 
 module.exports = reducer;
