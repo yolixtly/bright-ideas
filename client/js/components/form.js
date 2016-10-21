@@ -1,4 +1,6 @@
 var React = require('react');
+var actions = require('../actions');
+var connect = require('react-redux').connect;
 
 var Form = React.createClass({
 	onFormSubmit(event){
@@ -26,7 +28,7 @@ var Form = React.createClass({
 					{boardTitles}
 				</select>
 				<span className="input-group-btn">
-					<button type='submit' className="btn btn-success">Share your Idea!</button>
+					<button type='submit' className="btn btn-success"><a href="/#/BoardPage">Share your Idea!</a></button>
 				</span>
 			</form>
 		</div>
