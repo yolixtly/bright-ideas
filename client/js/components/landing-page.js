@@ -20,10 +20,15 @@ var LandingPage = React.createClass({
 		// window.location = '/#/BoardPage'; 
 		this.context.router.push('/BoardPage');
 	},
+	boardClick: function(){
+		console.log("you click this awesome Button Board!");
+	},
 	render: function(){
+		var self = this;
+		console.log(self);
 		var buttonBoards = this.props.boardTitles.map(function(titles, index){
 			return(
-				<ButtonBoard key={index} value={titles} />
+				<ButtonBoard key={index} value={titles} boardClick={self.boardClick}/>
 			)
 		});
 		return (
