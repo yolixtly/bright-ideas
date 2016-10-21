@@ -20,8 +20,9 @@ var LandingPage = React.createClass({
 		// window.location = '/#/BoardPage'; 
 		this.context.router.push('/BoardPage');
 	},
-	boardClick: function(){
-		console.log("you click this awesome Button Board!");
+	boardClick: function(boardTitle){
+		this.props.dispatch(actions.fetchABoard(boardTitle));
+		this.context.router.push('/BoardPage');
 	},
 	render: function(){
 		var self = this;

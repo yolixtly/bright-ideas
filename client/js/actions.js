@@ -96,11 +96,11 @@ var addNewIdea = function(newIdea, boardTitle){
 
 /* FETCH A SPECIFIC BOARD ACTIONS */
 
-var fetchABoardSuccess = function(boardBody){
-	console.log(boardBody);
+var fetchABoardSuccess = function(bodyBoard){
+	console.log(bodyBoard);
 	return {
 		type: FETCH_A_BOARD_SUCCESS,
-		data: boardBody
+		data: bodyBoard
 	};
 };
 var fetchABoardError = function(error){
@@ -123,9 +123,9 @@ var fetchABoard = function(boardTitle){
 			}
 			return response.json();
 		})
-		.then(function(titles){
+		.then(function(bodyBoard){
 			return dispatch(
-				fetchABoardSuccess(titles)
+				fetchABoardSuccess(bodyBoard)
 			);
 		})
 		.catch(function(error){

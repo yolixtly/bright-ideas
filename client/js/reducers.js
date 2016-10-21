@@ -35,6 +35,19 @@ var reducer = function(state, action){
 			error: action.error
 		}
 	}
+	/* On Click on Board Buttons, get the new Board content and update it*/
+	if(action.type === actions.FETCH_A_BOARD_SUCCESS){
+		var newState = update(state, {
+			currentBoardTitle: {$set : action.data.title},
+			currentBoardIdeas: {$set: action.data.ideas}
+		});
+		return newState;
+	}
+	if(action.type === actions.FETCH_A_BOARD_ERROR){
+		return {
+			error: action.error
+		}
+	}
 	return state;
 };
 
