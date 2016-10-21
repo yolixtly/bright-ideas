@@ -5,11 +5,9 @@ var actions = require('../actions');
 var Form = require('./form.js');
 // var ButtonBoard = require('./board-button.js');
 
-
 var LandingPage = React.createClass({
 	componentWillMount: function(){
 		this.props.dispatch(actions.fetchAllTitles());
-		
 	},
 	onTodoSubmit: function(newIdea, selectedBoard){
 		console.log('New Idea is: ', newIdea);
@@ -19,7 +17,7 @@ var LandingPage = React.createClass({
 		return (
 			<div className="LandingPage wrapper">
 			<h1>Bright Ideas</h1>
-				<Form onTodoSubmit={this.onTodoSubmit} />
+				<Form onTodoSubmit={this.onTodoSubmit} boardTitles={this.props.boardTitles} />
 			<hr />
 			<h3>Popular Boards</h3>
 
@@ -29,8 +27,9 @@ var LandingPage = React.createClass({
 });
 
 var mapStateToProps = function(state, props){
+	console.log(state.boardTitles, 'state');
 	return {
-
+		boardTitles: state.boardTitles
 	}
 };
 

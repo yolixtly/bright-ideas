@@ -12,15 +12,20 @@ var Form = React.createClass({
 		this.refs.theInput.value = '';
 	},
 	render: function(){
+		var boardTitles = this.props.boardTitles;
+		console.log(boardTitles, 'boardTitles in form');
+		var boardTitles = this.props.boardTitles.map(function(title, index){
+			return (
+				<option key={index} value={title}>{title}</option>
+			)
+		});
 	return (
 		<div className="Form wrapper">
 			<form onSubmit={this.onFormSubmit} className='input-group'>
 				<input placeholder='the best of...'
 				className="form-control" ref="theInput" />
 				<select ref="saveOnBoard">
-					<option value="Asian Countries">Asian Countries</option>
-					<option value="Healthy Food">Healthy Food</option>
-					<option value="States of America">States of America</option>
+					{boardTitles}
 				</select>
 				<span className="input-group-btn">
 					<button type='submit' className="btn btn-success">Share your Idea!</button>
