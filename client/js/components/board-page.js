@@ -10,7 +10,6 @@ var BoardPage = React.createClass({
 		console.log('Selected Board where New Idea will be stored: ', selectedBoard)
 	},
 	render: function(){
-		console.log(this.props);
 		return (
 			<div className="BoardPage wrapper">
 				<h1>Board Page</h1>
